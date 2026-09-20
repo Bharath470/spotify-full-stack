@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { urlPOST } from "../App";
+import { AdminContext } from "../context/adminContext";
 
 interface Album {
   _id: string;
@@ -27,7 +28,15 @@ const ListAlbum = () => {
 
   const removeAlbum = async (id: string) => {
     try {
-      const response = await axios.post(`${urlPOST}/api/album/remove/`, { id });
+      const { token } = useContext(AdminContext);
+      const response = await axios.post(
+        `${urlPOST}/api/album/remove/`,
+        { id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
       if (response.data.success) {
         toast.success(response.data.message);
         await fetchAlbums();

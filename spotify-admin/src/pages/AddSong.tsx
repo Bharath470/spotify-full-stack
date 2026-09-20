@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { urlPOST } from "../App";
 import { toast } from "react-toastify";
+import { AdminContext } from "../context/adminContext";
 
 interface Album {
   _id: string;
@@ -36,7 +37,11 @@ const AddSong = () => {
       formData.append("audio", song);
       formData.append("album", album);
 
-      const response = await axios.post(`${urlPOST}/api/song/add`, formData);
+      const { token } = useContext(AdminContext);
+      const response = await axios.post(`${urlPOST}/api/song/add`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       if (response.data.success) {
         toast.success("Song added");
         setName("");

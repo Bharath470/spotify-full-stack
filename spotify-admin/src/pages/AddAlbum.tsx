@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { assets } from "../assets/assets";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { urlPOST } from "../App";
+import { AdminContext } from "../context/adminContext";
 
 const AddAlbum = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -26,7 +27,12 @@ const AddAlbum = () => {
       formData.append("image", image);
       formData.append("bgColor", color);
 
-      const response = await axios.post(`${urlPOST}/api/album/add`, formData);
+      const { token } = useContext(AdminContext);
+
+      const response = await axios.post(`${urlPOST}/api/album/add`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       if (response.data.success) {
         toast.success("Album added");
         setDesc("");

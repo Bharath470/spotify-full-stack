@@ -1,9 +1,11 @@
 import { assets } from "../assets/assets.ts";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext.tsx";
 
 const Navbar = () => {
   const navigate = useNavigate();
-
+  const { token, user, logout } = useContext(AuthContext);
   return (
     <>
       <div className="w-full flex justify-between items-center font-semibold">
@@ -28,9 +30,15 @@ const Navbar = () => {
           <p className="bg-black px-3 py-1 rounded-2xl text-[15px] cursor-pointer">
             Install App
           </p>
-          <p className="bg-purple-500 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer">
-            D
-          </p>
+          {token ? (
+            <p
+              onClick={logout}
+              title="Click to log out"
+              className="bg-purple-500 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer uppercase"
+            >
+              {user?.name?.[0] || "U"}
+            </p>
+          ) : null}
         </div>
       </div>
       <div className="flex items-center gap-2 mt-4">

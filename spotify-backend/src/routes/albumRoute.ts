@@ -5,11 +5,12 @@ import {
   removeAlbum,
 } from "../controllers/albumController";
 import upload from "../middleware/multer";
+import authAdmin from "../middleware/adminAuth";
 
 const albumRouter = express.Router();
 
-albumRouter.post("/add", upload.single("image"), addAlbum);
+albumRouter.post("/add", authAdmin, upload.single("image"), addAlbum);
 albumRouter.get("/list", listAlbum);
-albumRouter.post("/remove", removeAlbum);
+albumRouter.post("/remove", authAdmin, removeAlbum);
 
 export default albumRouter;

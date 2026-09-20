@@ -1,8 +1,9 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { urlPOST } from "../App";
 import { toast } from "react-toastify";
+import { AdminContext } from "../context/adminContext";
 
 interface Song {
   _id: string;
@@ -28,7 +29,15 @@ const ListSong = () => {
 
   const removeSong = async (id: string) => {
     try {
-      const response = await axios.post(`${urlPOST}/api/song/remove/`, { id });
+      const { token } = useContext(AdminContext);
+      const response = await axios.post(
+        `${urlPOST}/api/song/remove/`,
+        { id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
       if (response.data.success) {
         toast.success(response.data.message);
         await fetchSongs();

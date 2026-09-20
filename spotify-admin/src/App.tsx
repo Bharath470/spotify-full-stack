@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Routes, Route } from "react-router-dom";
 import AddSong from "./pages/AddSong";
@@ -7,10 +7,22 @@ import ListAlbum from "./pages/ListAlbum";
 import ListSong from "./pages/ListSong";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
+import { AdminContext } from "./context/adminContext";
+import AdminLogin from "./pages/Login";
 
 export const urlPOST = "http://localhost:4000";
 
 const App = () => {
+  const { token } = useContext(AdminContext);
+
+  if (!token) {
+    return (
+      <>
+        <ToastContainer />
+        <AdminLogin />
+      </>
+    );
+  }
   return (
     <>
       <div className="flex items-start min-h-screen">
@@ -20,6 +32,7 @@ const App = () => {
           <Navbar />
           <div className="pt-8 pl-5 sm:pt-12 sm:pl-12">
             <Routes>
+              <Route path="/" element={<ListSong />} />
               <Route path="/add-song" element={<AddSong />} />
               <Route path="/add-album" element={<AddAlbum />} />
               <Route path="/list-song" element={<ListSong />} />
